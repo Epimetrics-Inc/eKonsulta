@@ -1,3 +1,5 @@
+import 'package:ekonsulta/drawer.dart';
+import 'package:ekonsulta/search/search.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -8,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'eKonsulta',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: MyHomePage(title: 'eKonsulta'),
     );
@@ -25,39 +27,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final SearchDemoSearchDelegate _delegate = SearchDemoSearchDelegate();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  int _lastIntegerSelected;
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(title: Text(widget.title), actions: <Widget>[
+      IconButton(
+        tooltip: 'Search',
+        icon: const Icon(Icons.search),
+        onPressed: () async {
+          final int selected = await showSearch<int>(
+            context: context,
+            delegate: _delegate,
+          );
+          if (selected != null && selected != _lastIntegerSelected) {
+            setState(() {
+              _lastIntegerSelected = selected;
+            });
+          }
+        },
+      ),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      key: _scaffoldKey,
+      appBar: buildAppBar(context),
       drawer: AppDrawer(),
       body: Center(child: Text('This is eKonsulta.')),
-    );
-  }
-}
-
-class AppDrawer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Drawer(
-      child: new ListView(
-        children: <Widget>[
-          new DrawerHeader(
-            child: Center(
-                child: Image(
-              image: AssetImage('assets/logo.png'),
-            )),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-          ),
-          new ListTile(
-            title: new Text('Create New Case Category'),
-            onTap: () {},
-          )
-        ],
-      ),
     );
   }
 }
