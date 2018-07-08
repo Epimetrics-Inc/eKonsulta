@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SearchDemoSearchDelegate extends SearchDelegate<int> {
+class PatientSearchDelegate extends SearchDelegate<int> {
   final List<int> _data =
       List<int>.generate(100001, (int i) => i).reversed.toList();
+
   final List<int> _history = <int>[42607, 85604, 66374, 44, 174];
 
   @override

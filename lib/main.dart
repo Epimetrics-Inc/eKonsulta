@@ -1,3 +1,4 @@
+import 'package:ekonsulta/appbar.dart';
 import 'package:ekonsulta/drawer.dart';
 import 'package:ekonsulta/search/search.dart';
 import 'package:flutter/material.dart';
@@ -27,38 +28,41 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final SearchDemoSearchDelegate _delegate = SearchDemoSearchDelegate();
+  final PatientSearchDelegate _patientSearchDelegate = PatientSearchDelegate();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  int _lastIntegerSelected;
-
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(title: Text(widget.title), actions: <Widget>[
-      IconButton(
-        tooltip: 'Search',
-        icon: const Icon(Icons.search),
-        onPressed: () async {
-          final int selected = await showSearch<int>(
-            context: context,
-            delegate: _delegate,
-          );
-          if (selected != null && selected != _lastIntegerSelected) {
-            setState(() {
-              _lastIntegerSelected = selected;
-            });
-          }
-        },
-      ),
-    ]);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: buildAppBar(context),
+      appBar: buildAppBar(context, widget.title, _patientSearchDelegate),
       drawer: AppDrawer(),
-      body: Center(child: Text('This is eKonsulta.')),
+      body: Center(
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              buildCardColumn(['1', '2']),
+              buildCardColumn(['1', '2']),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildCardColumn(List<String> text) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Card(
+          child: Text(text[0]),
+        ),
+        Card(
+          child: Text(text[1]),
+        ),
+      ],
     );
   }
 }
